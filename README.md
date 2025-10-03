@@ -145,27 +145,6 @@ open htmlcov/index.html  # Mac/Linux
 start htmlcov/index.html # Windows
 ```
 
-
-## 📁 Estructura del Proyecto
-
-```
-autoservice/
-├── autoservice.py              # Código principal completo
-│   ├── Abstracciones          # TimeProvider, EmailService, etc.
-│   ├── Implementaciones       # Real, Mock, Fake, Spy
-│   ├── Repositorios           # AppointmentRepo, InvoiceRepo
-│   ├── Lógica de Negocio      # Managers
-│   ├── Factories              # create_production/test_manager
-│   └── Tests (20+)            # Suite completa de tests
-│
-├── requirements.txt           # Dependencias del proyecto
-├── README.md                  # Esta documentación
-├── LICENSE                    # Licencia MIT
-│
-└── htmlcov/                   # Reportes de cobertura (generado)
-    └── index.html
-```
-
 ## 📊 Métricas de Calidad
 
 ### Cobertura de Código
