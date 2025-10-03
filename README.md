@@ -2,21 +2,6 @@
 
 Transformación completa de código legacy no testeable a arquitectura limpia con >90% de cobertura, aplicando patrones de diseño modernos y mejores prácticas de testing.
 
-## 📋 Tabla de Contenidos
-
-- [Descripción](#-descripción)
-- [Características](#-características)
-- [Arquitectura](#️-arquitectura)
-- [Instalación](#-instalación)
-- [Uso](#-uso)
-- [Tests](#-tests)
-- [Ejercicios Incluidos](#-ejercicios-incluidos)
-- [Conceptos Aplicados](#-conceptos-aplicados)
-- [Ejemplos de Código](#-ejemplos-de-código)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Contribuir](#-contribuir)
-- [Licencia](#-licencia)
-
 ## 🎯 Descripción
 
 **AutoService** es un sistema de gestión para talleres mecánicos que demuestra cómo refactorizar código legacy no testeable hacia una arquitectura limpia, mantenible y con alta cobertura de tests.
@@ -24,7 +9,6 @@ Transformación completa de código legacy no testeable a arquitectura limpia co
 ### El Problema
 
 ```python
-# ❌ CÓDIGO LEGACY - IMPOSIBLE DE TESTEAR
 class AutoServiceManager:
     def create_appointment(self, data):
         now = datetime.now()              # ❌ Tiempo hardcodeado
@@ -43,7 +27,6 @@ class AutoServiceManager:
 ### La Solución
 
 ```python
-# ✅ CÓDIGO REFACTORIZADO - 100% TESTEABLE
 class AutoServiceManager:
     def __init__(self, time_provider: TimeProvider,
                  email_service: EmailService,
@@ -53,61 +36,6 @@ class AutoServiceManager:
         self.repo = appointment_repo   # ✅ Repositorio inyectado
 ```
 
-**Beneficios:**
-- ✅ Dependency Injection completa
-- ✅ Test doubles (Mock, Fake, Spy)
-- ✅ Tiempo controlable en tests
-- ✅ BD transaccional en memoria
-- ✅ >90% cobertura de código
-
-## ✨ Características
-
-- 🏗️ **Arquitectura Limpia**: Separación clara de responsabilidades
-- 🧪 **100% Testeable**: Todas las dependencias son inyectables
-- 🔄 **Repository Pattern**: Abstracción completa de persistencia
-- ⏰ **Time Provider**: Tiempo controlable para tests determinísticos
-- 📧 **Service Abstractions**: Email y notificaciones mockeables
-- 💾 **BD Transaccional**: SQLite en memoria con rollback automático
-- 📊 **Alta Cobertura**: >90% líneas de código cubiertas
-- 🎭 **Test Doubles**: Mock, Fake, Spy implementados
-- 🏭 **Factory Pattern**: Configuración fácil para prod/test
-- 📈 **Métricas**: Coverage y calidad de código incluidas
-
-## 🏗️ Arquitectura
-
-```
-┌─────────────────────────────────────────────────────┐
-│              CAPA DE PRESENTACIÓN                    │
-│         (Factories, CLI, Configuración)              │
-└─────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│              CAPA DE APLICACIÓN                      │
-│      AutoServiceManager | BillingManager             │
-│           (Lógica de negocio testeable)              │
-└─────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│            CAPA DE ABSTRACCIÓN                       │
-│  TimeProvider | EmailService | NotificationService   │
-│              (Interfaces/Contratos)                  │
-└─────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│           CAPA DE INFRAESTRUCTURA                    │
-│   AppointmentRepository | InvoiceRepository          │
-│          (SQLite, persistencia, I/O)                 │
-└─────────────────────────────────────────────────────┘
-```
-
-### Principios SOLID Aplicados
-
-- **S**ingle Responsibility: Cada clase tiene una única responsabilidad
-- **O**pen/Closed: Abierto para extensión, cerrado para modificación
-- **L**iskov Substitution: Implementaciones intercambiables
-- **I**nterface Segregation: Interfaces específicas por funcionalidad
-- **D**ependency Inversion: Dependencias abstraídas e inyectadas
-
 ## 🚀 Instalación
 
 ### Requisitos Previos
@@ -115,26 +43,6 @@ class AutoServiceManager:
 - Python 3.8+
 - pip
 - virtualenv (recomendado)
-
-### Setup Rápido
-
-```bash
-# Clonar repositorio
-git clone https://github.com/tuusuario/autoservice.git
-cd autoservice
-
-# Crear entorno virtual
-python -m venv venv
-
-# Activar entorno virtual
-# Linux/Mac:
-source venv/bin/activate
-# Windows:
-venv\Scripts\activate
-
-# Instalar dependencias
-pip install -r requirements.txt
-```
 
 ### Dependencias
 
@@ -237,179 +145,6 @@ open htmlcov/index.html  # Mac/Linux
 start htmlcov/index.html # Windows
 ```
 
-## 📚 Ejercicios Incluidos
-
-Este proyecto incluye 3 ejercicios prácticos resueltos que demuestran técnicas avanzadas de testing:
-
-### 🔬 Ejercicio 1: Pruebas BD Transaccionales
-
-**Objetivo:** Dominar tests con base de datos usando transacciones y rollback automático.
-
-**Tests incluidos:**
-- ✅ `test_insert_multiple_appointments_with_rollback` - Inserta 3 citas y verifica rollback
-- ✅ `test_foreign_key_constraint_fails` - Valida constraints de integridad referencial
-- ✅ `test_complex_transaction_appointment_invoice_email` - Transacción completa multi-tabla
-
-**Conceptos:**
-- Fixtures con BD en memoria (`:memory:`)
-- Setup/Teardown automático
-- Validación de constraints FK
-- Tests aislados sin contaminación
-
-### 🏗️ Ejercicio 2: Refactoring para Testeabilidad
-
-**Objetivo:** Identificar code smells y aplicar inyección de dependencias.
-
-**Implementaciones:**
-- ✅ `BillingManager` refactorizado con DI completa
-- ✅ Identificación de 5 problemas de testeabilidad
-- ✅ Aplicación de SOLID principles
-
-**Transformación:**
-
-```python
-# ❌ Antes: Acoplado
-class BillingManager:
-    def create_invoice(self):
-        now = datetime.now()
-        conn = sqlite3.connect('prod.db')
-
-# ✅ Después: Testeable
-class BillingManager:
-    def __init__(self, time_provider, invoice_repo, email_service):
-        self.time = time_provider
-        self.repo = invoice_repo
-        self.email = email_service
-```
-
-### 🎭 Ejercicio 3: Test Doubles Avanzados
-
-**Objetivo:** Dominar Mock, Fake, Spy y sus casos de uso.
-
-**Doubles implementados:**
-
-1. **Mock (MockEmailService)**
-   - Simula comportamiento sin efectos secundarios
-   - Verifica llamadas y argumentos
-   ```python
-   mock_email = MockEmailService()
-   manager.create_appointment(...)
-   assert len(mock_email.sent_emails) == 1
-   ```
-
-2. **Fake (FakeTimeProvider)**
-   - Implementación funcional simplificada
-   - Tiempo totalmente controlable
-   ```python
-   fake_time = FakeTimeProvider(datetime(2025, 1, 1))
-   fake_time.advance(hours=5)
-   ```
-
-3. **Spy (SpyNotificationService)**
-   - Captura y registra interacciones
-   - Permite verificación posterior
-   ```python
-   spy = SpyNotificationService()
-   assert spy.call_count == 3
-   assert spy.was_notified("user@test.com")
-   ```
-
-## 🎓 Conceptos Aplicados
-
-### Design Patterns
-
-- **Repository Pattern**: Abstracción de persistencia
-- **Factory Pattern**: Creación de objetos configurados
-- **Dependency Injection**: Inversión de control
-- **Strategy Pattern**: Intercambio de algoritmos
-
-### Testing Patterns
-
-- **Test Fixtures**: Setup/Teardown reutilizable
-- **Test Doubles**: Mock, Stub, Fake, Spy, Dummy
-- **Arrange-Act-Assert**: Estructura clara de tests
-- **Transactional Tests**: Tests con rollback automático
-
-### Clean Code
-
-- **SOLID Principles**: Diseño orientado a objetos
-- **DRY**: Don't Repeat Yourself
-- **KISS**: Keep It Simple, Stupid
-- **Separation of Concerns**: Responsabilidades claras
-
-## 💡 Ejemplos de Código
-
-### Antes vs Después
-
-#### ❌ Legacy: Imposible de Testear
-
-```python
-class AutoServiceManager:
-    def create_appointment(self, name, email, service, date):
-        # Tiempo hardcodeado - no controlable en tests
-        now = datetime.now()
-        
-        # Email directo - se envía en cada test
-        smtp = smtplib.SMTP('smtp.gmail.com')
-        smtp.sendmail('auto@service.com', email, "Confirmado")
-        
-        # BD persistente - contamina tests
-        conn = sqlite3.connect('production.db')
-        conn.execute("INSERT INTO appointments ...")
-        conn.commit()
-```
-
-#### ✅ Refactorizado: 100% Testeable
-
-```python
-class AutoServiceManager:
-    def __init__(self, 
-                 time_provider: TimeProvider,
-                 email_service: EmailService,
-                 appointment_repo: AppointmentRepository):
-        self.time = time_provider      # Inyectado - mockeable
-        self.email = email_service     # Inyectado - mockeable
-        self.repo = appointment_repo   # Inyectado - mockeable
-    
-    def create_appointment(self, name, email, service, date):
-        created_at = self.time.now()  # Tiempo controlable
-        
-        appointment = Appointment(...)
-        appointment_id = self.repo.create(appointment)  # BD abstracta
-        
-        self.email.send(email, "Confirmado", ...)  # Email mockeable
-        
-        return {'id': appointment_id, 'status': 'confirmed'}
-```
-
-### Test Ejemplo Completo
-
-```python
-def test_create_appointment_sends_email():
-    """Test con todas las dependencias mockeadas"""
-    # Arrange
-    fixed_time = datetime(2025, 10, 2, 14, 0)
-    mock_email = MockEmailService()
-    manager = AutoServiceManager(
-        time_provider=FakeTimeProvider(fixed_time),
-        email_service=mock_email,
-        appointment_repo=SqliteAppointmentRepository(':memory:')
-    )
-    
-    # Act
-    result = manager.create_appointment(
-        client_name="Juan",
-        email="juan@test.com",
-        service_type="oil_change",
-        date_str="2025-10-15"
-    )
-    
-    # Assert
-    assert result['status'] == 'confirmed'
-    assert len(mock_email.sent_emails) == 1
-    assert mock_email.sent_emails[0]['to'] == "juan@test.com"
-    assert result['created_at'] == fixed_time
-```
 
 ## 📁 Estructura del Proyecto
 
@@ -443,15 +178,6 @@ Name              Stmts   Miss  Cover
 autoservice.py      489     40    92%
 -------------------------------------
 TOTAL               489     40    92%
-```
-
-### Complejidad Ciclomática
-
-```bash
-pip install radon
-radon cc autoservice.py -a
-
-Average complexity: A (6.2)
 ```
 
 ### Resultados de Tests
